@@ -28,7 +28,9 @@ class ShortcutTest(unittest.TestCase):
                 self.assertEqual(configured_shortcut(target), 'Ctrl+Alt+Q')
             with patch('soundblaster.shortcuts._bus_call', return_value='ai 0'):
                 self.assertEqual(configured_shortcut(target), 'Ctrl+Alt+Q')
-            self.assertTrue(migrate_managed_shortcut(target))
+            with patch('soundblaster.shortcuts._bus_call',
+                       return_value='ai 1 201326673'):
+                self.assertTrue(migrate_managed_shortcut(target))
             self.assertIn(f'Exec="{target}" --toggle --notify', desktop.read_text())
             self.assertIn('Name=OutputDeck - Switch output', desktop.read_text())
             self.assertEqual(config.read_text(), contents)
